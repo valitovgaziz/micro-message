@@ -15,5 +15,4 @@ type Message struct {
 	DeletedAt   gorm.DeletedAt `json:"deleted_at"`   // message deleted time
 	IsPerformed bool           `json:"is_performed"` // if message has been performed
 	PerformedAt time.Time      `json:"performed_at"` // message performed time
-	IsSaved     bool           `json:"is_saved"`     // if message has been saved into the database
 }

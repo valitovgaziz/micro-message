@@ -7,7 +7,7 @@ import (
 
 func CreateMessage(message *models.Message) (*models.Message, error) {
 	message, err := storage.SaveMessage(message)
-	// TODO save to satatistics
+	SaveSatatistics(message)
 	// TODO send to kafka
 	return message, err
 }

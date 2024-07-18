@@ -6,15 +6,14 @@ import (
 )
 
 func InitServerAndRouting(config *Config) {
-	
+
 	// Initialize
 	r := gin.Default()
 
 	// Routes
 	r.POST("/api/message", controllers.SaveMessage)
-	r.GET("/api/statistic", controllers.GetStatistics)
+	r.GET("/api/statistic", controllers.GetStatisticsByUserId)
 
 	// StartServer
 	r.Run(":" + config.ServerPort)
 }
-
