@@ -17,7 +17,6 @@ func SaveSatatistics(message *models.Message) {
 	statistics.DeletedAt = message.DeletedAt
 	statistics.IsPerformed = message.IsPerformed
 	statistics.PerformedAt = message.PerformedAt
-	statistics.IsSaved = true
 	statistics.IncomingTime = time.Now()
 	storage.SaveSatatistics(statistics)
 }
