@@ -11,5 +11,10 @@ func main() {
 			"message": "posted",
 		})
 	})
+	r.GET("/api/statistic", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "getted",
+		})
+	})
 	r.Run()
 }
