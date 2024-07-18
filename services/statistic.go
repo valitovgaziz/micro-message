@@ -23,6 +23,6 @@ func SaveSatatistics(message *models.Message) {
 }
 
 // GetSatatisticsByUserId: getting statistics by user id
-func GetSatatisticsByUserId(userId string) (*[]models.Statistics, error) {
+func GetSatatisticsByUserId(userId uint64) (*[]models.Statistics, error) {
 	return storage.GetSatatisticsByUserId(userId)
 }

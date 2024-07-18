@@ -13,3 +13,12 @@ Expected output:
 - Link to the project deployed on the server
 - Connection instructions
 - Git repository with the code
+
+
+TODO LIST
+done | endPoint: POST message
+done | endPoint: GET statistics by userId
+save message into psql
+realize sender into kafka
+read from kafka
+run into doker

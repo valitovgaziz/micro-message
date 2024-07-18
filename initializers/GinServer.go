@@ -12,7 +12,7 @@ func InitServerAndRouting(config *Config) {
 
 	// Routes
 	r.POST("/api/message", controllers.SaveMessage)
-	r.GET("/api/statistics/{id}/user", controllers.GetStatisticsByUserId)
+	r.GET("/api/statistics/byuserid", controllers.GetStatisticsByUserId)
 
 	// StartServer
 	r.Run(":" + config.ServerPort)

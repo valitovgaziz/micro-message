@@ -13,7 +13,7 @@ func SaveSatatistics(statistic *models.Statistics) (*models.Statistics, error) {
 	return statistic, nil
 }
 
-func GetSatatisticsByUserId(userId string) (*[]models.Statistics, error) {
+func GetSatatisticsByUserId(userId uint64) (*[]models.Statistics, error) {
 	var statistics []models.Statistics
 	err := DB.Where("user_id = ?", userId).Find(&statistics).Error
 	if err != nil {

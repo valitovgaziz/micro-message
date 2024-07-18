@@ -7,17 +7,17 @@ import (
 )
 
 func SaveMessage(c *gin.Context) {
-	message := &models.Message{}
-	if err := c.BindJSON(&message); err != nil {
+	messageInput := &models.MessageInput{}
+	if err := c.BindJSON(&messageInput); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
-	message, err := services.CreateMessage(message)
+	message, err := services.CreateMessage(messageInput)
 	if err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(200, gin.H{
-		"message": "posted",
+		"message": message.Id,
 	})
 }
