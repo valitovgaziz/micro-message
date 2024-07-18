@@ -1,18 +1,20 @@
 package initializers
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/valitovgaziz/micro-message/controllers"
+)
 
-func InitRouting(config *Config) {
+func InitServerAndRouting(config *Config) {
+	
+	// Initialize
 	r := gin.Default()
-	r.POST("/api/message", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "posted",
-		})
-	})
-	r.GET("/api/statistic", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "getted",
-		})
-	})
+
+	// Routes
+	r.POST("/api/message", controllers.SaveMessage)
+	r.GET("/api/statistic", controllers.GetStatistics)
+
+	// StartServer
 	r.Run(":" + config.ServerPort)
 }
+
