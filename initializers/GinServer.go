@@ -14,5 +14,5 @@ func InitRouting(config *Config) {
 			"message": "getted",
 		})
 	})
-	r.Run(config.ServerPort)
+	r.Run(":" + config.ServerPort)
 }
