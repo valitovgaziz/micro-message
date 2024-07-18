@@ -18,7 +18,7 @@ Expected output:
 TODO LIST
 done | endPoint: POST message
 done | endPoint: GET statistics by userId
-save message into psql
-realize sender into kafka
-read from kafka
-run into doker
+done | save message into psql
+---- | realize sender into kafka
+---- | read from kafka
+---- | run into doker
