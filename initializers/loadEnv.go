@@ -1,8 +1,6 @@
 package initializers
 
 import (
-	"time"
-
 	"github.com/spf13/viper"
 )
 
@@ -24,6 +22,7 @@ func LoadConfig(path string) (config Config, err error) {
 	viper.AddConfigPath(path)
 	viper.SetConfigType("env") // method to tell Viper the type of configuration file we used.
 	viper.SetConfigName("app")
+	viper.SetDefault("ServerPort", "8080")
 
 	viper.AutomaticEnv()
 
