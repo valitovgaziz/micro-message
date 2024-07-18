@@ -8,7 +8,7 @@ import (
 
 type Statistics struct {
 	Id           uint64         `json:"total"`         // statistic id
-	MessgeId     uint64         `json:"id"`            // message id
+	MessageId     uint64         `json:"id"`            // message id
 	UserId       uint64         `json:"user_id"`       // user id or sender id
 	Destination  string         `json:"destination"`   // message destination
 	Content      string         `json:"content"`       // message content

@@ -9,7 +9,7 @@ var DB *gorm.DB
 
 func SaveMessage(message *models.Message) (*models.Message, error) {
 	err := DB.Create(&message).Error
-	if err!= nil {
+	if err != nil {
 		return message, err
 	}
 	return message, nil

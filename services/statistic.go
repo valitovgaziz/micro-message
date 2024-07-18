@@ -10,6 +10,7 @@ import (
 // SaveStatistics: saving statistics to database
 func SaveSatatistics(message *models.Message) {
 	statistics := &models.Statistics{}
+	statistics.MessageId = message.Id
 	statistics.UserId = message.UserId
 	statistics.Destination = message.Destination
 	statistics.Content = message.Content

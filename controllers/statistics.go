@@ -8,7 +8,7 @@ import (
 // GetStatisticsByUserId godoc: Get statistics by user ID
 func GetStatisticsByUserId(c *gin.Context) {
 	// TODO: Implement this method
-	UserId := c.Param("user_id")
+	UserId := c.Param("id")
 	UserStatistics, err := services.GetSatatisticsByUserId(UserId)
 	if err != nil {
 		c.JSON(400, gin.H{
