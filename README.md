@@ -19,6 +19,7 @@ TODO LIST
 done | endPoint: POST message
 done | endPoint: GET statistics by userId
 done | save message into psql
+---- | setting kafka
 ---- | realize sender into kafka
 ---- | read from kafka
 ---- | run into doker
