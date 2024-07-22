@@ -23,3 +23,5 @@ done | save message into psql
 ---- | realize sender into kafka
 ---- | read from kafka
 ---- | run into doker
+
+set migare on start server and DB // TODO
