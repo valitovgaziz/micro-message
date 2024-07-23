@@ -1,11 +1,13 @@
 package initializers
 
 import (
+	"os"
+
 	"github.com/gin-gonic/gin"
 	"github.com/valitovgaziz/micro-message/controllers"
 )
 
-func InitServerAndRouting(config *Config) {
+func InitServerAndRouting() {
 
 	// Initialize
 	r := gin.Default()
@@ -15,5 +17,5 @@ func InitServerAndRouting(config *Config) {
 	r.GET("/api/statistics/byuserid", controllers.GetStatisticsByUserId)
 
 	// StartServer
-	r.Run(":" + config.ServerPort)
+	r.Run(":" + os.Getenv("SERVER_PORT"))
 }

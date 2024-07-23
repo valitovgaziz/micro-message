@@ -1,31 +1,24 @@
 version: "3.8"
 
 services:
-  app:
+  api:
     build: .
+    env_file:
+      - .env
     ports:
-      - "8080:8080" # порт для доступа к приложению
-    depends_on:
-      - postgres
-      - kafka
+      - "8000:8000" # порт для доступа к приложению внешний / внутренний
+    volumes:
+      - .:/usr/src/app
+    command: air ./cmd/main.go -b 0.0.0.0
+  db:
+    image: postgres:alpine
     environment:
-      - POSTGRES_HOST=postgres
-      - KAFKA_HOST=kafka
-      - KAFKA_PORT=9092
-      - KAFKA_TOPIC=mytopic
-      - KAFKA_GROUP_ID=mygroup
-      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-  postgres:
-    image: postgres:16
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
     ports:
-      - "5432:5432" # порт для доступа к базе данных
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
-  kafka:
-    image: confluentinc/cp-enterprise-kafka:6.2.2
-    ports:
-      - "9092:9092" # порт для Kafka
-    environment:
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - "${DB_PORT}:${DB_PORT}"
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+volumes:
+  postgres-db:

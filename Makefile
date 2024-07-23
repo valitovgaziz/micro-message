@@ -6,4 +6,10 @@ run: build
 test:
 	@go test
 
+dbuild:
+	@docker compose build
+
+dup: dbuild
+	@docker compose up
+
 .DEFAULT_GOAL=run
