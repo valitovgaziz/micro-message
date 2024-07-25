@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/valitovgaziz/micro-message/models"
-	"github.com/valitovgaziz/micro-message/services"
+	"github.com/valitovgaziz/rest-api/models"
+	"github.com/valitovgaziz/rest-api/services"
 )
 
 func SaveMessage(c *gin.Context) {

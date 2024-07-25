@@ -1,7 +1,7 @@
 package storage
 
 import (
-	"github.com/valitovgaziz/micro-message/models"
+	"github.com/valitovgaziz/rest-api/models"
 	"gorm.io/gorm"
 )
 

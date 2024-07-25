@@ -3,8 +3,8 @@ package services
 import (
 	"time"
 
-	"github.com/valitovgaziz/micro-message/models"
-	"github.com/valitovgaziz/micro-message/storage"
+	"github.com/valitovgaziz/rest-api/models"
+	"github.com/valitovgaziz/rest-api/storage"
 )
 
 // SaveStatistics: saving statistics to database

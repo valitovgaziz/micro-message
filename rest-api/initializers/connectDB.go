@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/valitovgaziz/micro-message/storage"
+	"github.com/valitovgaziz/rest-api/storage"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"

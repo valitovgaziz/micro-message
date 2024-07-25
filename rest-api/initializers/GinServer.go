@@ -4,7 +4,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/valitovgaziz/micro-message/controllers"
+	"github.com/valitovgaziz/rest-api/controllers"
 )
 
 func InitServerAndRouting() {

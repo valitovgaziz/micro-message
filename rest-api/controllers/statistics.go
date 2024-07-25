@@ -4,7 +4,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/valitovgaziz/micro-message/services"
+	"github.com/valitovgaziz/rest-api/services"
 )
 
 // GetStatisticsByUserId godoc: Get statistics by user ID
