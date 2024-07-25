@@ -12,4 +12,4 @@ dbuild:
 dup: dbuild
 	@docker compose up
 
-.DEFAULT_GOAL=run
+.DEFAULT_GOAL=dup
