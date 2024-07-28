@@ -56,7 +56,7 @@ func main() {
 
 			resp := &sarama.ProducerMessage{
 				Topic: "testFromPerf",
-				Key:   sarama.StringEncoder(reseivedMessage.Id),
+				Key:   sarama.StringEncoder(msg.Key),
 				Value: sarama.ByteEncoder(perfJsonMessage),
 			}
 
