@@ -33,7 +33,7 @@ func InitKafka() {
 	}
 	log.Printf("Consumer created: %v", Consumer)
 
-	partConsumer, err := Consumer.ConsumePartition("test", 0, sarama.OffsetNewest)
+	partConsumer, err := Consumer.ConsumePartition("testFromPerf", 0, sarama.OffsetNewest)
 	if err != nil {
 		log.Fatalf("Failed create partition consumer: %v", err)
 	}
@@ -69,7 +69,7 @@ func SendKafkaTestTopic(message *models.Message) error {
 		return err
 	}
 	msg := &sarama.ProducerMessage{
-		Topic: "test",
+		Topic: "testToPerf",
 		Key:   sarama.StringEncoder(requestID),
 		Value: sarama.ByteEncoder(jsonMessage),
 	}

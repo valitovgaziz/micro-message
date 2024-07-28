@@ -8,6 +8,9 @@ import (
 func CreateMessage(messageInput *models.MessageInput) (*models.Message, error) {
 	message := models.CreateNewMessage(messageInput)
 	message, err := storage.SaveMessage(message)
+	if err!= nil {
+		return nil, err
+	}
 	SaveSatatistics(message)
 	err = SendKafkaTestTopic(message)
 	if err!= nil {

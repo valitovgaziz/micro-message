@@ -23,7 +23,7 @@ func main() {
 	}
 	defer consumer.Close()
 
-	partConsumer, err := consumer.ConsumePartition("test", 0, sarama.OffsetOldest)
+	partConsumer, err := consumer.ConsumePartition("testToPerf", 0, sarama.OffsetOldest)
 	if err != nil {
 		log.Fatalf("Failed to create partition consumer: %v", err)
 	}
@@ -46,18 +46,27 @@ func main() {
 
 			log.Printf("Received message: %v\n", &reseivedMessage)
 
-			PerformMessage(reseivedMessage)
+			PerformMessage(&reseivedMessage)
 
-			resp := &sarama.ProducerMessage{
-				Topic: "test",
-				
+			perfJsonMessage, err := json.Marshal(reseivedMessage)
+			if err != nil {
+				log.Fatalf("Failed to marshal message: %v\n", err)
+				continue
 			}
 
+			resp := &sarama.ProducerMessage{
+				Topic: "testFromPerf",
+				Key:   sarama.StringEncoder(reseivedMessage.Id),
+				Value: sarama.ByteEncoder(perfJsonMessage),
+			}
+
+			_, _, err = producer.SendMessage(resp)
+			if err != nil {
+				log.Fatalf("Failed to send message to Kafka: %v\n", err)
+			}
 		}
 	}
 }
-
-
 
 type Message struct {
 	Id          uint64         `json:"id"`           // message id
@@ -70,7 +79,7 @@ type Message struct {
 	PerformedAt time.Time      `json:"performed_at"` // message performed time
 }
 
-func PerformMessage(message Message) {
+func PerformMessage(message *Message) {
 	// perform message
 	message.IsPerformed = true
 	message.PerformedAt = time.Now()
