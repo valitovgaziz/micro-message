@@ -2,8 +2,10 @@ package services
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"sync"
+	"time"
 
 	"github.com/IBM/sarama"
 	"github.com/google/uuid"
@@ -11,35 +13,38 @@ import (
 )
 
 var ResponseChannels map[string]chan *sarama.ConsumerMessage
+var Mu sync.Mutex
+var Producer sarama.SyncProducer
+var Consumer sarama.Consumer
+var PartConsumer sarama.PartitionConsumer
 var mu sync.Mutex
 
 func InitKafka() {
 	ResponseChannels = make(map[string]chan *sarama.ConsumerMessage)
-
-	Producer, err := sarama.NewSyncProducer([]string{"kafka:9092"}, nil)
+	Producer, err := sarama.NewSyncProducer([]string{"kafka:9092}"}, nil)
 	if err != nil {
-		log.Fatal("Failed to create producer: %v", err)
+		log.Fatalf("Failed create producer: %v", err)
 	}
-	defer Producer.Close()
+	log.Printf("Producer created: %v", Producer)
 
 	Consumer, err := sarama.NewConsumer([]string{"kafka:9092"}, nil)
 	if err != nil {
-		log.Fatal("Failed to create consumer: %v", err)
+		log.Fatalf("Failed create consumer: %v", err)
 	}
-	defer Consumer.Close()
+	log.Printf("Consumer created: %v", Consumer)
 
-	PartConsumer, err := Consumer.ConsumePartition("performed", 0, sarama.OffsetNewest)
+	partConsumer, err := Consumer.ConsumePartition("test", 0, sarama.OffsetNewest)
 	if err != nil {
-		log.Fatal("Failed to create partition consumer: %v", err)
+		log.Fatalf("Failed create partition consumer: %v", err)
 	}
-	defer PartConsumer.Close()
+	log.Printf("Partition consumer created: %v", partConsumer)
 
 	go func() {
 		for {
 			select {
-			case msg, ok := <-PartConsumer.Messages():
+			case msg, ok := <-partConsumer.Messages():
 				if !ok {
-					log.Fatal("Channel closed, exiting goroutine")
+					log.Println("Channel closed, exiting goroutine")
 					return
 				}
 				responseID := string(msg.Key)
@@ -53,25 +58,42 @@ func InitKafka() {
 			}
 		}
 	}()
+
 }
 
-
-func SendKafkaMessage(message *models.Message) {
-
+func SendKafkaTestTopic(message *models.Message) error {
 	requestID := uuid.New().String()
-
-	bytes, err := json.Marshal(message)
+	jsonMessage, err := json.Marshal(message)
 	if err!= nil {
-		log.Fatal("Error while marshalling message: %v", err)
-		return
+		log.Printf("Failed to marshal message: %v", err)
+		return err
 	}
-
 	msg := &sarama.ProducerMessage{
-		Topic: "perform",
-		Key: sarama.StringEncoder(requestID),
-		Value: sarama.ByteEncoder(bytes),
+		Topic: "test",
+		Key:   sarama.StringEncoder(requestID),
+		Value: sarama.ByteEncoder(jsonMessage),
+	}
+	
+	_, _, err = Producer.SendMessage(msg)
+	if err!= nil {
+		log.Printf("Failed to send message to Kafka: %v", err)
+		return err
 	}
 
-	_, _, err = Producer.SendMessage(msg)
+	responseCh := make(chan *sarama.ConsumerMessage)
+	mu.Lock()
+	ResponseChannels[requestID] = responseCh
+	mu.Unlock()
 
+	select {
+	case responseMsg := <- responseCh:
+		log.Printf("Received response: %s", string(responseMsg.Value))
+		return nil
+	case <-time.After(10 * time.Second):
+		mu.Lock()
+		delete(ResponseChannels, requestID)
+		mu.Unlock()
+		return errors.New("Timeout")
+	}
 }
+
