@@ -9,7 +9,7 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
     networks:
-      - kafka-networks
+      - default
 
   kafka:
     image: confluentinc/cp-kafka:latest
@@ -19,7 +19,7 @@ services:
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
     networks:
-      - kafka-network
+      - default
       
   db:
     image: postgres:alpine
@@ -32,9 +32,9 @@ services:
     ports:
       - "${DB_PORT}:${DB_PORT}"
     volumes:
-      - postgres-db:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data
     networks:
-      - kafka-networks
+      - db
 
   api:
     build:
@@ -48,18 +48,21 @@ services:
       - .:/usr/src/app
     command: air ./cmd/main.go -b 0.0.0.0
     networks:
-      - kafka-networks
+      - default
+      - db
   
   performer:
     build:
-      context: ./performer
+      context: ./performer-service
       dockerfile: Dockerfile
     env_file:
       - .env
     depends_on:
       - kafka
     networks:
-      - kafka-network
-
+      - default
 volumes:
-  postgres-db:
+  db-data:
+networks:
+  db:
+    driver: bridge
