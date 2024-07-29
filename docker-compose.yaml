@@ -50,6 +50,8 @@ services:
     networks:
       - default
       - db
+    depends_on:
+      - kafka
   
   performer:
     build:
@@ -57,8 +59,10 @@ services:
       dockerfile: Dockerfile
     env_file:
       - .env
+    command: air ./main.go -b 0.0.0.0
     depends_on:
       - kafka
+      - api
     networks:
       - default
 volumes:
